@@ -1,0 +1,5 @@
+flake8 
+pytest==8.0.2
+pytest-order==1.2.0
+pytest-dependency==0.6.0
+docker==7.0.0

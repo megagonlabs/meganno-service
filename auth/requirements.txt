@@ -1,0 +1,10 @@
+cryptography==42.0.4
+Flask==2.3.2
+Flask-SQLAlchemy==3.1.1
+jsonschema==4.21.1
+pydash==7.0.6
+python-dotenv==1.0.1
+bcrypt==3.2.2
+SQLAlchemy==2.0.25
+zxcvbn==4.4.28
+gunicorn==20.1.0

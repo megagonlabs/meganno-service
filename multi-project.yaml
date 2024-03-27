@@ -1,0 +1,55 @@
+x-common-variables: &common-variables
+    MEGANNO_PROJECT_NAME: ${MEGANNO_PROJECT_NAME:-meganno}
+
+services:
+    neo4j:
+        image: neo4j:4.4.27-community
+        ports:
+            # uncomment to expose ports 7473 and/or 7474
+            # - "7473:7473"
+            # - "7474:7474"
+            - "7687:7687"
+        environment:
+            NEO4J_AUTH: neo4j/${MEGANNO_NEO4J_PASSWORD:-meganno}
+            NEO4JLABS_PLUGINS: '["apoc","graph-data-science"]'
+            NEO4J_dbms_security_procedures_allowlist: gds.*,apoc.*
+            NEO4J_dbms_security_procedures_unrestricted: gds.*,apoc.*
+        volumes:
+            - ${MEGANNO_PROJECT_DIR:-./meganno_data}/data:/data
+            - ${MEGANNO_PROJECT_DIR:-./meganno_data}/logs/neo4j:/logs
+        healthcheck:
+            test:
+                [
+                    "CMD",
+                    "/var/lib/neo4j/bin/cypher-shell",
+                    "-u",
+                    "neo4j",
+                    "-p",
+                    "${MEGANNO_NEO4J_PASSWORD:-meganno}",
+                    "MATCH () RETURN count(*) as count",
+                ]
+            interval: 20s
+            timeout: 10s
+            retries: 5
+            start_period: 10s
+        restart: always
+
+    api:
+        image: megagonlabs/meganno-service:${MEGANNO_IMAGE:-latest}
+        ports:
+            - ${MEGANNO_SERVICE_PORT:-5000}:${MEGANNO_SERVICE_PORT:-5000}
+            - "43258:43258"
+        environment:
+            <<: *common-variables
+            MEGANNO_FLASK_HOST: 0.0.0.0
+            MEGANNO_NEO4J_PASSWORD: ${MEGANNO_NEO4J_PASSWORD:-meganno}
+            MEGANNO_NEO4J_HOST: neo4j
+            MEGANNO_SERVICE_PORT: ${MEGANNO_SERVICE_PORT:-5000}
+            MEGANNO_AUTH_HOST: ${MEGANNO_AUTH_HOST:-}
+            MEGANNO_AUTH_PORT: ${MEGANNO_AUTH_PORT:-5001}
+            MEGANNO_LOGGING: ${MEGANNO_LOGGING:-False}
+        volumes:
+            - ${MEGANNO_PROJECT_DIR:-./meganno_data}/logs/api:/logs
+        depends_on:
+            neo4j:
+                condition: service_healthy

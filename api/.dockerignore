@@ -1,0 +1,15 @@
+*/__pycache__
+__pycache__
+.ipynb_checkpoints
+*.ipynb
+tests/
+.env
+.vscode
+.aws
+.git
+.DS_Store
+*.md
+.single-project.yaml
+.multi-project.yaml
+
+*/meganno-auth.db
