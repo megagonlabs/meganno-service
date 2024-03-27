@@ -2,7 +2,7 @@
 
 These are RESTful API services for the meganno platform.
 
-![version](https://img.shields.io/badge/latest-v1.2.0-blue)
+![version](https://img.shields.io/badge/api--latest-v1.2.0-blue)
 ![version](https://img.shields.io/badge/auth--latest-v1.0.0-blue)
 
 ## Set up services
@@ -25,8 +25,8 @@ MEGANNO_NEO4J_PASSWORD=meganno
 MEGANNO_ADMIN_USERNAME=admin
 MEGANNO_ADMIN_PASSWORD=
 MEGANNO_ENCRYPTION_KEY=
-MEGANNO_IMAGE=latest
-MEGANNO_AUTH_IMAGE=auth-latest
+MEGANNO_IMAGE=api-1.2.0
+MEGANNO_AUTH_IMAGE=auth-1.0.0
 ```
 
 | Variable                | Default          | Description                                                                         |
@@ -40,8 +40,8 @@ MEGANNO_AUTH_IMAGE=auth-latest
 | MEGANNO_ADMIN_USERNAME  | admin            | Adminitrator username for default admin. account (only needed it for auth service)  |
 | MEGANNO_ADMIN_PASSWORD  |                  | Adminitrator password for default admin. account (only needed it for auth service)  |
 | MEGANNO_ENCRYPTION_KEY  |                  | Fernet encryption key (only needed it for auth service)                             |
-| MEGANNO_IMAGE           | latest           | Docker image tag                                                                    |
-| MEGANNO_AUTH_IMAGE      | auth-latest      | Docker image tag for auth service                                                   |
+| MEGANNO_IMAGE           | api-1.2.0        | Docker image tag                                                                    |
+| MEGANNO_AUTH_IMAGE      | auth-1.0.0       | Docker image tag for auth service                                                   |
 
 ### Install Docker
 
@@ -74,7 +74,7 @@ You can configure multiple projects to connect to the same backend auth server. 
 ```bash
 # replace {MEGANNO_AUTH_PORT}, {MEGANNO_PROJECT_DIR}
 # with default values or values in .env file
-sudo docker run --env-file .env -p {MEGANNO_AUTH_PORT}:{MEGANNO_AUTH_PORT} -p 43259:43259 -v "$(pwd)/{MEGANNO_PROJECT_DIR}/instance:/instance" -v "$(pwd)/{MEGANNO_PROJECT_DIR}/logs/auth:/logs" -td megagonlabs/meganno-service:auth-latest
+sudo docker run --env-file .env -p {MEGANNO_AUTH_PORT}:{MEGANNO_AUTH_PORT} -p 43259:43259 -v "$(pwd)/{MEGANNO_PROJECT_DIR}/instance:/instance" -v "$(pwd)/{MEGANNO_PROJECT_DIR}/logs/auth:/logs" -td megagonlabs/meganno-service:auth-1.0.0
 
 sudo docker compose -f multi-project.yaml up -d
 ```

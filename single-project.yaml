@@ -3,7 +3,7 @@ x-common-variables: &common-variables
 
 services:
     auth:
-        image: megagonlabs/meganno-service:${MEGANNO_AUTH_IMAGE:-auth-latest}
+        image: megagonlabs/meganno-service:${MEGANNO_AUTH_IMAGE:-auth-1.0.0}
         environment:
             <<: *common-variables
             MEGANNO_AUTH_PORT: ${MEGANNO_AUTH_PORT:-5001}
@@ -55,7 +55,7 @@ services:
         restart: always
 
     api:
-        image: megagonlabs/meganno-service:${MEGANNO_IMAGE:-latest}
+        image: megagonlabs/meganno-service:${MEGANNO_IMAGE:-api-1.2.0}
         ports:
             - ${MEGANNO_SERVICE_PORT:-5000}:${MEGANNO_SERVICE_PORT:-5000}
         environment:

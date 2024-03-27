@@ -76,7 +76,7 @@ try:
 
     print(f"Starting auth container...")
     auth_container = client.containers.run(
-        "megagonlabs/meganno-service:auth-latest",
+        "megagonlabs/meganno-service:auth-1.0.0",
         detach=True,
         ports={15001: 15001},
         environment={

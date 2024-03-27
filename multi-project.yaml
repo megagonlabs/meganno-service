@@ -35,7 +35,7 @@ services:
         restart: always
 
     api:
-        image: megagonlabs/meganno-service:${MEGANNO_IMAGE:-latest}
+        image: megagonlabs/meganno-service:${MEGANNO_IMAGE:-api-1.2.0}
         ports:
             - ${MEGANNO_SERVICE_PORT:-5000}:${MEGANNO_SERVICE_PORT:-5000}
             - "43258:43258"
