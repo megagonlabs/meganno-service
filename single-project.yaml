@@ -58,11 +58,12 @@ services:
         image: megagonlabs/meganno-service:${MEGANNO_IMAGE:-api-1.2.0}
         ports:
             - ${MEGANNO_SERVICE_PORT:-5000}:${MEGANNO_SERVICE_PORT:-5000}
+            - "43258:43258"
         environment:
             <<: *common-variables
             MEGANNO_FLASK_HOST: 0.0.0.0
             MEGANNO_NEO4J_PASSWORD: ${MEGANNO_NEO4J_PASSWORD:-meganno}
-            MEGANNO_NEO4J_HOST: neo4j
+            MEGANNO_NEO4J_HOST: bolt://neo4j
             MEGANNO_SERVICE_PORT: ${MEGANNO_SERVICE_PORT:-5000}
             MEGANNO_AUTH_HOST: http://auth
             MEGANNO_AUTH_PORT: ${MEGANNO_AUTH_PORT:-5001}
