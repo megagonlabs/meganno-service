@@ -43,7 +43,10 @@ MEGANNO_AUTH_IMAGE=auth-1.0.0
 | MEGANNO_IMAGE           | api-1.2.0        | Docker image tag                                                                    |
 | MEGANNO_AUTH_IMAGE      | auth-1.0.0       | Docker image tag for auth service                                                   |
 
-### Install Docker
+### Docker
+#### Install Docker (on Linux)
+
+> for other system platforms, follow instructions on "[Install Docker Engine](https://docs.docker.com/engine/install/)" to install docker and docker compose.
 
 ```bash
 sudo yum update -y
@@ -51,7 +54,7 @@ sudo yum install docker -y
 sudo service docker start
 ```
 
-### Install Docker Compose plugin
+#### Install Docker Compose plugin (on Linux)
 
 ```bash
 sudo -i
