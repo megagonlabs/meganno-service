@@ -5,6 +5,9 @@ These are RESTful API services for the meganno platform.
 ![version](https://img.shields.io/badge/api--latest-v1.2.0-blue)
 ![version](https://img.shields.io/badge/auth--latest-v1.0.0-blue)
 
+## **Prerequisite Knowledge**
+Documentation for [MEGAnno concepts](https://meganno.megagon.info) 
+
 ## Set up services
 
 ### Generate an encryption key
