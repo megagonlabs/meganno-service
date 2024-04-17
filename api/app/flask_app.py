@@ -74,11 +74,11 @@ try:
     app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix=f"/{project_name}")
     aws = boto3.Session(region_name="us-east-1")
     if aws.get_credentials() is not None:
-        labeler_cluster_ARN = os.getenv("MEGANNO_CLUSTER_ARN", None)
+        meganno_cluster_ARN = os.getenv("MEGANNO_CLUSTER_ARN", None)
         ecs = aws.client("ecs", region_name="us-east-1")
     if pydash.is_empty(pydash.trim(MEGANNO_NEO4J_HOST)):
         task_list = ecs.list_tasks(
-            cluster=labeler_cluster_ARN,
+            cluster=meganno_cluster_ARN,
             serviceName=("neo4j-" + project_name),
             desiredStatus="RUNNING",
             launchType="FARGATE",
@@ -86,7 +86,7 @@ try:
         task_ARNs = task_list.get("taskArns", [])
         print(f"task_ARNs {task_ARNs}")
         task_description = ecs.describe_tasks(
-            cluster=labeler_cluster_ARN, tasks=task_ARNs
+            cluster=meganno_cluster_ARN, tasks=task_ARNs
         )
         task_description_list = task_description.get("tasks")
         task = task_description_list[0]
@@ -233,15 +233,3 @@ def logging(response):
     if MEGANNO_LOGGING:
         traffic_logger.info(f"{response.status} ({response.status_code})")
     return response
-
-
-from app.routes import (
-    agents,
-    annotations,
-    assignments,
-    data,
-    schemas,
-    verifications,
-    views,
-)
-from app.routes.statistics import annotator, embeddings, label

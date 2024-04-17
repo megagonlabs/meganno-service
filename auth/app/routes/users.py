@@ -82,6 +82,7 @@ def register():
                 "444",
                 "castro",
                 "labeler",
+                "meganno",
                 payload["username"],
             ],
         )

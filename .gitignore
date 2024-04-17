@@ -136,7 +136,6 @@ start_notebook_sv.sh
 ._*
 */._*
 node_modules/
-labeler/bundle.js
 
 development.ipynb
 meganno-auth.db
