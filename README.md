@@ -8,6 +8,8 @@ These are RESTful API services for the meganno platform.
 ## **Prerequisite Knowledge**
 Documentation for [MEGAnno concepts](https://meganno.megagon.info) 
 
+MEGAnno-client github repository for [installation instructions](https://github.com/megagonlabs/meganno-client)
+
 ## Set up services
 
 ### Generate an encryption key
