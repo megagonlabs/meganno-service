@@ -233,3 +233,14 @@ def logging(response):
     if MEGANNO_LOGGING:
         traffic_logger.info(f"{response.status} ({response.status_code})")
     return response
+
+from app.routes import (
+    agents,
+    annotations,
+    assignments,
+    data,
+    schemas,
+    verifications,
+    views,
+)
+from app.routes.statistics import annotator, embeddings, label
