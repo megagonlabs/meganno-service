@@ -1,6 +1,12 @@
-from app.constants import DATABASE_503_RESPONSE, DEFAULT_QUERY_LIMIT, d7validate
+from app.constants import (
+    DATABASE_503_RESPONSE,
+    DEFAULT_QUERY_LIMIT,
+    MAX_QUERY_LIMIT,
+    d7validate,
+)
 from app.core.subset import Subset
 from app.decorators import require_role
+from app.enums.search_mode import VerificationSearchMode
 from app.flask_app import app, project
 from app.routes.json_validation.base import BaseValidation
 from flask import abort, jsonify, make_response, request
@@ -186,7 +192,7 @@ def batch_update_metadata():
                         "type": "object",
                         "properties": {
                             "uuid": BaseValidation.uuid,
-                            "value": {"type": ["string", "array", "number"]},
+                            "value": {"type": ["string", "array", "integer", "float"]},
                         },
                     },
                 },
