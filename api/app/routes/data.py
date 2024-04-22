@@ -1,9 +1,5 @@
-from app.constants import (
-    DATABASE_503_RESPONSE,
-    DEFAULT_QUERY_LIMIT,
-    MAX_QUERY_LIMIT,
-    d7validate,
-)
+from app.constants import (DATABASE_503_RESPONSE, DEFAULT_QUERY_LIMIT,
+                           MAX_QUERY_LIMIT, d7validate)
 from app.core.subset import Subset
 from app.decorators import require_role
 from app.enums.search_mode import VerificationSearchMode
@@ -192,7 +188,7 @@ def batch_update_metadata():
                         "type": "object",
                         "properties": {
                             "uuid": BaseValidation.uuid,
-                            "value": {"type": ["string", "array", "integer", "float"]},
+                            "value": {"type": ["string", "array", "integer", "number"]},
                         },
                     },
                 },
