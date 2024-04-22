@@ -258,7 +258,7 @@ class Subset:
             match (m2:Metadata) -[:RECORD_META_OF {name:$record_meta_name}]-(n2:Record)
             where n2.uuid <>n.uuid
             return  n2.uuid as uuid, n2.content as content
-            order by gds.alpha.similarity.cosine(m2.value,m.value) DESC limit $limit 
+            order by gds.similarity.cosine(m2.value,m.value) DESC limit $limit 
             }
             return uuid
         """
