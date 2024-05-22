@@ -875,6 +875,23 @@ class Project:
         except Exception:
             return False
 
+    def project_reset(self):
+        """
+        CAUTION: this function is wipes out any existing data
+        in the project and resets the project to its original state.
+        The data will not be recoverable after reset.
+        Intented for internal use only. Proceed with caution.
+        Endpoint exposed only to admin users and is not availabel in the client lib.
+        """
+        q = """Match (n)  WHERE NOT "Project" in labels(n)
+               DETACH DELETE(n) 
+               return count(n)
+            """
+
+        ret = self.database.write_db(q, args={})[0][0]
+        print(ret)
+        return ret
+
 
 def create_constraints(database):
     # dataset, id or uuid be the unique identifier,

@@ -1,5 +1,9 @@
-from app.constants import (DATABASE_503_RESPONSE, DEFAULT_QUERY_LIMIT,
-                           MAX_QUERY_LIMIT, d7validate)
+from app.constants import (
+    DATABASE_503_RESPONSE,
+    DEFAULT_QUERY_LIMIT,
+    MAX_QUERY_LIMIT,
+    d7validate,
+)
 from app.core.subset import Subset
 from app.decorators import require_role
 from app.enums.search_mode import VerificationSearchMode
@@ -7,6 +11,9 @@ from app.flask_app import app, project
 from app.routes.json_validation.base import BaseValidation
 from flask import abort, jsonify, make_response, request
 from neo4j.exceptions import CypherSyntaxError
+import os
+from datetime import date
+from cryptography.fernet import Fernet
 
 
 @app.route("/data/search", methods=["GET"])
@@ -205,6 +212,62 @@ def batch_update_metadata():
         abort(500, ex)
 
 
+@app.route("/project/reset", methods=["POST"])
+@require_role("administrator")
+def project_reset():
+    """PROCEED with CAUTION: resets the project by removing all nodes
+    (except the project node).
+    Needs to provide an admin auth token and a reset_token that
+    expires every day.
+    """
+    payload = {
+        "reset_token": str(request.json.get("reset_token", "")),
+    }
+    d7validate(
+        {
+            "properties": {
+                "reset_token": BaseValidation.string,
+            }
+        },
+        payload,
+    )
+    try:
+        reset_token = payload["reset_token"]
+        if verify_reset_token(reset_token):
+            ret = project.project_reset()
+            return make_response(f"Project has been reset, {ret} nodes removed", 200)
+        elif payload["reset_token"] == "":
+            return make_response(
+                "'reset_token' required to reset a project. \
+                Make a GET request to the endpoint '/project/reset' to obtain the token",
+                400,
+            )
+
+        else:
+            return make_response(
+                "'reset_token' wrong or expired. \
+                Make a GET request to the endpoint '/project/reset' to obtain the latest token",
+                401,
+            )
+    except Exception as ex:
+        abort(500, ex)
+
+
+@app.route("/project/reset", methods=["GET"])
+@require_role("administrator")
+def project_get_reset_secret():
+    try:
+        ret = {
+            "message": "THIS WIPES OUT ALL DATA AND RESETS THE DB, PROCEED WITH CAUTION.\
+                To proceed, make a POST request to the same endpoint, with the 'reset_token' attched.\
+                The reset_token expires daily. ",
+            "reset_token": get_reset_token(),
+        }
+        return make_response(jsonify(ret), 200)
+    except Exception as ex:
+        abort(500, ex)
+
+
 @app.route("/data/suggest_similar", methods=["GET"])
 @require_role(["administrator", "contributor"])
 def suggest_similar():
@@ -242,3 +305,25 @@ def verify_import_payload(url: str, file_type: str):
         if url is not None:
             errors.append("not taking url for direct dataframe import")
     return errors
+
+
+def get_reset_token():
+    """Generating a secret token for project reset operations.
+    Secrets expire daily
+    """
+    project_secret = os.getenv("MEGANNO_ENCRYPTION_KEY")
+    today = date.today().strftime("%m/%d/%y")
+    f = Fernet(project_secret)
+    token = f.encrypt(today.encode("utf-8"))
+    return token.decode("utf-8")
+
+
+def verify_reset_token(token):
+    project_secret = os.getenv("MEGANNO_ENCRYPTION_KEY")
+    f = Fernet(project_secret)
+    today = date.today().strftime("%m/%d/%y")
+    try:
+        decrypted = f.decrypt(token.encode("utf-8"))
+        return decrypted == today.encode("utf-8")
+    except:
+        return False
